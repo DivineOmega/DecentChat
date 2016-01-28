@@ -22,21 +22,45 @@
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="contacts">
 
-          <h1>Your DM Address</h1>
-          <input type="text" id="dmAddress" readonly />
+          <h1>Contact List</h1>
+          <table class="table table-striped" id="contactsList">
+            <tr>
+              <th>Contact Name</th>
+              <th>Actions</th>
+            </tr>
+            <tr>
+              <td>Mr Jones</td>
+              <td><button class="btn btn-default contactChatButton" id="contact_0">Chat</button></td>
+            </tr>
+            <tr>
+              <td>Miss Crystal</td>
+              <td><button class="btn btn-default contactChatButton" id="contact_1">Chat</button></td>
+            </tr>
+          </table>
+
+          <hr/>
 
           <h1>Add a contact</h1>
-          <p>To add a contact, enter their name and paste their DM address into the text box below.</p>
-          <p>
-            <label>Name: </label><input type="text" id="nameToAdd" /><br/>
-            <label>DM address: </label><input type="text" id="dmAddressToAdd" /><br/>
-            <button id="addContactButton">Add</button>
-          </p>
+          <p>To add a contact, enter their name and DM address below.</p>
+          <div class="">
+            <div class="form-group">
+              <label class="sr-only" for="nameToAdd">Name: </label>
+              <input class="form-control" type="text" id="nameToAdd" placeholder="Name" />
+            </div>
+            <div class="form-group">
+              <label class="sr-only" for="dmAddressToAdd">DM address: </label>
+              <input class="form-control" type="text" id="dmAddressToAdd" placeholder="DM Address" />
+            </div>
+            <button class="btn btn-default" id="addContactButton">Add</button>
+          </div>
 
-          <h1>Contact List</h1>
-          <ul id="contactsList">
-            <li>Contact 1</li>
-          </ul>
+          <hr/>
+
+          <h1>Your DM Address</h1>
+          <p>Give your DM address to your contacts, so they can add you to their contact list.</p>
+          <div class="form-group">
+            <input class="form-control" type="text" id="dmAddress" readonly />
+          </div>
 
         </div>
       </div>
