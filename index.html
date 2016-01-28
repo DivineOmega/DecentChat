@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DecentChat</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+  <body>
+
+    <div class="container-fluid">
+
+
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#contacts" aria-controls="home" role="tab" data-toggle="tab">Contacts</a></li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="contacts">
+
+          <h1>Your DM Address</h1>
+          <input type="text" id="dmAddress" readonly />
+
+          <h1>Add a contact</h1>
+          <p>To add a contact, enter their name and paste their DM address into the text box below.</p>
+          <p>
+            <label>Name: </label><input type="text" id="nameToAdd" /><br/>
+            <label>DM address: </label><input type="text" id="dmAddressToAdd" /><br/>
+            <button id="addContactButton">Add</button>
+          </p>
+
+          <h1>Contact List</h1>
+          <ul id="contactsList">
+            <li>Contact 1</li>
+          </ul>
+
+        </div>
+      </div>
+
+      <!-- Libaries -->
+      <script>window.$ = window.jQuery = require('./bower_components/jquery/dist/jquery.min.js');</script>
+      <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    </div>
+
+
+
+  </body>
+
+</html>
