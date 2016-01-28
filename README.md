@@ -1,1 +1,3 @@
 # DecentChat
+
+`bower install bootstrap`
