@@ -3,11 +3,11 @@ function populateMyDmAddress()
 {
   var net = require('net');
 
-  var client = net.connect({ port: 8881 }, () => {
+  var client = net.connect({ port: 8881 }, function() {
     console.log('Connected (to get my DM address)');
 
   });
-  client.on('data', (data) => {
+  client.on('data', function(data) {
     data = data.toString();
 
     if (data.startsWith('*')) {
@@ -24,7 +24,7 @@ function populateMyDmAddress()
     }
 
   });
-  client.on('end', () => {
+  client.on('end', function() {
     console.log('Disconnected');
   });
 }
