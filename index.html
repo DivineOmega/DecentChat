@@ -24,17 +24,23 @@
 
           <h1>Contact List</h1>
           <table class="table table-striped" id="contactsList">
+
+          </table>
+
+          <table id="contactsListStart" style="display:none;">
             <tr>
               <th>Contact Name</th>
               <th>Actions</th>
             </tr>
+          </table>
+
+          <table id="contactsListTemplate" style="display:none;">
             <tr>
-              <td>Mr Jones</td>
-              <td><button class="btn btn-default contactChatButton" id="contact_0">Chat</button></td>
-            </tr>
-            <tr>
-              <td>Miss Crystal</td>
-              <td><button class="btn btn-default contactChatButton" id="contact_1">Chat</button></td>
+              <td>[[name]]</td>
+              <td>
+                <button class="btn btn-default contactChatButton" id="contactChatButton_[[index]]">Chat</button>
+                <button class="btn btn-default contactDeleteButton" id="contactDeleteButton_[[index]]">Delete</button>
+              </td>
             </tr>
           </table>
 
