@@ -120,6 +120,11 @@ $(document).on('click', '.contactChatButton', function() {
   var idParts = id.split('_');
   var index = idParts[1];
 
+  if ($('#chatTab_'+index+' a').length) {
+    $('#chatTab_'+index+' a').tab('show');
+    return;
+  }
+
   var contacts = getContacts();
   var contact = contacts[index];
 
@@ -136,6 +141,8 @@ $(document).on('click', '.contactChatButton', function() {
   html = html.replaceAll("[[index]]", index);
 
   $('#tabPanels').append(html);
+
+  $('#chatTab_'+index+' a').tab('show');
 
 });
 
