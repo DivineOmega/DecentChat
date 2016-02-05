@@ -115,6 +115,30 @@ $(document).on('click', '.contactDeleteButton', function() {
   }
 });
 
+$(document).on('click', '.contactChatButton', function() {
+  var id = $(this).attr('id');
+  var idParts = id.split('_');
+  var index = idParts[1];
+
+  var contacts = getContacts();
+  var contact = contacts[index];
+
+  var html = $('#chatTabTemplate').html();
+
+  html = html.replaceAll("[[name]]", contact.name);
+  html = html.replaceAll("[[index]]", index);
+
+  $('#tabs').append(html);
+
+  html = $('#chatTabPanelTemplate').html();
+
+  html = html.replaceAll("[[name]]", contact.name);
+  html = html.replaceAll("[[index]]", index);
+
+  $('#tabPanels').append(html);
+
+});
+
 $(document).ready(function() {
     populateMyDmAddress();
     updateContactsUI();

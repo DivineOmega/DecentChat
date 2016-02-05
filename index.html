@@ -14,12 +14,22 @@
 
 
       <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
+      <ul class="nav nav-tabs" role="tablist" id="tabs">
         <li role="presentation" class="active"><a href="#contacts" aria-controls="home" role="tab" data-toggle="tab">Contacts</a></li>
+
+        <div id="chatTabTemplate" style="display: none;">
+          <li role="presentation" id="chatTab_[[index]]">
+            <a href="#chatTabPanel_[[index]]" aria-controls="chatTabPanel_[[index]]" role="tab" data-toggle="tab">
+              [[name]]
+            </a>
+          </li>
+        </div>
+
       </ul>
 
+
       <!-- Tab panes -->
-      <div class="tab-content">
+      <div class="tab-content" id="tabPanels">
         <div role="tabpanel" class="tab-pane active" id="contacts">
 
           <h1>Contact List</h1>
@@ -69,6 +79,13 @@
           </div>
 
         </div>
+
+        <div id="chatTabPanelTemplate" style="display: none;">
+          <div role="tabpanel" class="tab-pane active" id="chatTabPanel_[[index]]">
+            <p>Lorem ipsum</p>
+          </div>
+        </div>
+
       </div>
 
       <!-- Libaries -->
