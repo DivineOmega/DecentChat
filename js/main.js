@@ -1,26 +1,172 @@
 
 function populateMyDmAddress()
 {
+  var dmAddressStarted = false;
+  var chunk = '';
+
   var net = require('net');
 
   var client = net.connect({ port: 8881 }, function() {
-    console.log('Connected (to get my DM address)');
-
+    console.log('Connected (to get dm address)');
   });
   client.on('data', function(data) {
-    data = data.toString();
 
-    if (data.startsWith('*')) {
-      if (data.startsWith('*100')) {
-        client.write('me\n');
-      } else if (data.startsWith('*330')) {
-        var dataParts = data.split('\n');
-        localStorage.dmAddress = dataParts[1];
+    chunk += data.toString();
+    delimIndex = chunk.indexOf('\n');
+
+    while (delimIndex > -1) {
+      toProcess = chunk.substring(0, delimIndex);
+
+      if (dmAddressStarted === true) {
+        localStorage.dmAddress = toProcess;
         $('#dmAddress').val(localStorage.dmAddress);
         console.log("Got my DM address");
         client.end();
+        return;
       }
-      return;
+
+      if (toProcess.startsWith('*100')) {
+        client.write('me\n');
+      } else if (toProcess.startsWith('*330')) {
+        dmAddressStarted = true;
+      }
+
+      chunk = chunk.substring(delimIndex + 1);
+      delimIndex = chunk.indexOf('\n');
+    }
+
+  });
+  client.on('end', function() {
+    console.log('Disconnected');
+  });
+
+}
+
+function sendMessage(dmAddress, message)
+{
+  var chunk = '';
+
+  var net = require('net');
+
+  var client = net.connect({ port: 8881 }, function() {
+    console.log('Connected (to send message)');
+  });
+  client.on('data', function(data) {
+
+    chunk += data.toString();
+    delimIndex = chunk.indexOf('\n');
+
+    while (delimIndex > -1) {
+      toProcess = chunk.substring(0, delimIndex);
+
+      if (toProcess.startsWith('*100')) {
+        client.write('send\n');
+      } else if (toProcess.startsWith('*101')) {
+        client.write(dmAddress+'\n');
+      } else if (toProcess.startsWith('*103')) {
+        client.write('DecentChat Private Message\n');
+      } else if (toProcess.startsWith('*104')) {
+        client.write(message+'\n');
+        client.write('.\n');
+      } else if (toProcess.startsWith('*300')) {
+        client.end();
+        return;
+      }
+
+      chunk = chunk.substring(delimIndex + 1);
+      delimIndex = chunk.indexOf('\n');
+    }
+
+  });
+  client.on('end', function() {
+    console.log('Disconnected');
+  });
+
+}
+
+function getPersonalMessage(id)
+{
+  console.log(id);
+  var chunk = '';
+  var messageStarted = false;
+
+  var net = require('net');
+
+  var client = net.connect({ port: 8881 }, function() {
+    console.log('Connected (to get personal message by ID)');
+  });
+  client.on('data', function(data) {
+
+    chunk += data.toString();
+    delimIndex = chunk.indexOf('\n');
+
+    while (delimIndex > -1) {
+      toProcess = chunk.substring(0, delimIndex);
+
+      if (toProcess.startsWith('*311')) {
+        client.end();
+        return;
+      }
+
+      if (messageStarted === true && toProcess.length) {
+        console.log(toProcess);
+      }
+
+      if (toProcess.startsWith('*100')) {
+        client.write('get\n');
+      } else if (toProcess.startsWith('*111')) {
+        client.write(id+'\n');
+      } else if (toProcess.startsWith('*310')) {
+        messageStarted = true;
+      }
+
+      chunk = chunk.substring(delimIndex + 1);
+      delimIndex = chunk.indexOf('\n');
+    }
+
+  });
+  client.on('end', function() {
+    console.log('Disconnected');
+  });
+}
+
+function getPersonalMessageIDs()
+{
+  var chunk = '';
+  var listStarted = false;
+
+  var net = require('net');
+
+  var client = net.connect({ port: 8881 }, function() {
+    console.log('Connected (to get personal message IDs)');
+  });
+  client.on('data', function(data) {
+
+    chunk += data.toString();
+    delimIndex = chunk.indexOf('\n');
+
+    while (delimIndex > -1) {
+      toProcess = chunk.substring(0, delimIndex);
+
+      if (toProcess.startsWith('*321')) {
+        client.end();
+        return;
+      }
+
+      if (listStarted === true) {
+        getPersonalMessage(toProcess);
+      }
+
+      if (toProcess.startsWith('*100')) {
+        client.write('list\n');
+      } else if (toProcess.startsWith('*121')) {
+        client.write('0\n');
+      } else if (toProcess.startsWith('*320')) {
+        listStarted = true;
+      }
+
+      chunk = chunk.substring(delimIndex + 1);
+      delimIndex = chunk.indexOf('\n');
     }
 
   });
@@ -146,9 +292,25 @@ $(document).on('click', '.contactChatButton', function() {
 
 });
 
+$(document).on('click', '.chatSendButton', function() {
+  var id = $(this).attr('id');
+  var idParts = id.split('_');
+  var index = idParts[1];
+
+  var contacts = getContacts();
+  var contact = contacts[index];
+
+  var message = $('#chatTextBox_'+index).val();
+
+  $('#chatTextBox_'+index).val('');
+
+  sendMessage(contact.dmAddress, message);
+});
+
 $(document).ready(function() {
     populateMyDmAddress();
     updateContactsUI();
+    getPersonalMessageIDs();
 });
 
 String.prototype.replaceAll = function(search, replacement) {

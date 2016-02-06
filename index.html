@@ -82,7 +82,12 @@
 
         <div id="chatTabPanelTemplate" style="display: none;">
           <div role="tabpanel" class="tab-pane" id="chatTabPanel_[[index]]">
-            <p>Lorem ipsum</p>
+              <div class="input-group">
+                <input class="form-control" type="text" id="chatTextBox_[[index]]" placeholder="Enter message to send..." />
+                <span class="input-group-btn">
+                  <button class="btn btn-default chatSendButton" id="chatSendButton_[[index]]">Send</button>
+                </span>
+              </div>
           </div>
         </div>
 
