@@ -21,7 +21,7 @@ function populateMyDmAddress()
         localStorage.dmAddress = toProcess;
         $('#dmAddress').val(localStorage.dmAddress);
         console.log("Got my DM address");
-        client.end();
+        client.destroy();
         return;
       }
 
@@ -36,7 +36,7 @@ function populateMyDmAddress()
     }
 
   });
-  client.on('end', function() {
+  client.on('close', function() {
     console.log('Disconnected');
   });
 
@@ -69,7 +69,7 @@ function sendMessage(dmAddress, message)
         client.write(message+'\n');
         client.write('.\n');
       } else if (toProcess.startsWith('*300')) {
-        client.end();
+        client.destroy();
         return;
       }
 
@@ -78,7 +78,7 @@ function sendMessage(dmAddress, message)
     }
 
   });
-  client.on('end', function() {
+  client.on('close', function() {
     console.log('Disconnected');
   });
 
@@ -86,7 +86,6 @@ function sendMessage(dmAddress, message)
 
 function getPersonalMessage(id)
 {
-  console.log(id);
   var chunk = '';
   var messageStarted = false;
 
@@ -104,7 +103,7 @@ function getPersonalMessage(id)
       toProcess = chunk.substring(0, delimIndex);
 
       if (toProcess.startsWith('*311')) {
-        client.end();
+        client.destroy();
         return;
       }
 
@@ -125,7 +124,7 @@ function getPersonalMessage(id)
     }
 
   });
-  client.on('end', function() {
+  client.on('close', function() {
     console.log('Disconnected');
   });
 }
@@ -149,7 +148,7 @@ function getPersonalMessageIDs()
       toProcess = chunk.substring(0, delimIndex);
 
       if (toProcess.startsWith('*321')) {
-        client.end();
+        client.destroy();
         return;
       }
 
@@ -170,7 +169,7 @@ function getPersonalMessageIDs()
     }
 
   });
-  client.on('end', function() {
+  client.on('close', function() {
     console.log('Disconnected');
   });
 }
