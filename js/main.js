@@ -309,7 +309,7 @@ function updateContactsUI()
 
     var html = $('#contactsListTemplate').html();
 
-    html = html.replaceAll("[[name]]", contact.name);
+    html = html.replaceAll("[[name]]", htmlEntities(contact.name));
     html = html.replaceAll("[[index]]", i);
 
     $('#contactsList').append(html);
@@ -376,14 +376,14 @@ function addChatTabForContact(index) {
 
   var html = $('#chatTabTemplate').html();
 
-  html = html.replaceAll("[[name]]", contact.name);
+  html = html.replaceAll("[[name]]", htmlEntities(contact.name));
   html = html.replaceAll("[[index]]", index);
 
   $('#tabs').append(html);
 
   html = $('#chatTabPanelTemplate').html();
 
-  html = html.replaceAll("[[name]]", contact.name);
+  html = html.replaceAll("[[name]]", htmlEntities(contact.name));
   html = html.replaceAll("[[index]]", index);
 
   $('#tabPanels').append(html);
@@ -421,12 +421,23 @@ $(document).on('click', '.chatSendButton', function() {
 
 });
 
+function htmlEntities(rawStr)
+{
+  var encodedStr = rawStr.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+     return '&#'+i.charCodeAt(0)+';';
+  });
+
+  return encodedStr;
+}
+
 function addChatTransaction(index, name, message)
 {
+
+
   var html = $('#chatTransactionTemplate').html();
 
-  html = html.replaceAll("[[name]]", name);
-  html = html.replaceAll("[[message]]", message);
+  html = html.replaceAll("[[name]]", htmlEntities(name));
+  html = html.replaceAll("[[message]]", htmlEntities(message));
 
   $('#chatTransactions_'+index).append(html);
 
