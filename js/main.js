@@ -113,7 +113,7 @@ function processPersonalMessage(id, timestamp, dmAddress, subject, message)
   }
 
   addChatTabForContact(index);
-  addChatTransaction(index, contact.name, message);
+  addChatTransaction(index, timestamp, contact.name, message);
 
 }
 
@@ -418,7 +418,7 @@ $(document).on('click', '.chatSendButton', function() {
   $('#chatTextBox_'+index).val('');
 
   sendMessage(contact.dmAddress, message);
-  addChatTransaction(index, "Me", message);
+  addChatTransaction(index, Date.now(), "Me", message);
 
 });
 
@@ -431,12 +431,14 @@ function htmlEntities(rawStr)
   return encodedStr;
 }
 
-function addChatTransaction(index, name, message)
+function addChatTransaction(index, timestamp, name, message)
 {
-
+  var datetime = new Date(parseInt(timestamp));
+  var datetimeString = datetime.toLocaleTimeString() + ' ' + datetime.toLocaleDateString();
 
   var html = $('#chatTransactionTemplate').html();
 
+  html = html.replaceAll("[[datetime]]", htmlEntities(datetimeString));
   html = html.replaceAll("[[name]]", htmlEntities(name));
   html = html.replaceAll("[[message]]", htmlEntities(message));
 

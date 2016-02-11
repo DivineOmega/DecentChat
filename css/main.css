@@ -18,3 +18,8 @@ h1 {
 .chatTransactions .chatTransaction .name {
   font-weight: bold;
 }
+
+.chatTransactions .chatTransaction .datetime {
+  font-size: 75%;
+  float: right;
+}
