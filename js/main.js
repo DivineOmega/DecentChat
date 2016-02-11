@@ -90,6 +90,8 @@ function processPersonalMessage(timestamp, dmAddress, subject, message)
     return;
   }
 
+  deletePersonalMessage(id);
+
   if (message.trim() === '') {
     return;
   }
@@ -175,7 +177,6 @@ function getPersonalMessage(id)
 
       if (toProcess.startsWith('*311')) {
         processPersonalMessage(timestamp, dmAddress, subject, message);
-        deletePersonalMessage(id);
         client.destroy();
         return;
       }
