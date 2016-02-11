@@ -2,3 +2,19 @@ h1 {
   font-size: 14px;
   font-weight: bold;
 }
+
+.chatTransactions {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 95vw;
+  height: 75vh;
+  overflow: auto;
+}
+
+.chatTransactions .chatTransaction {
+  margin-top: 5px;
+}
+
+.chatTransactions .chatTransaction .name {
+  font-weight: bold;
+}

@@ -18,7 +18,7 @@
         <li role="presentation" class="active"><a href="#contacts" aria-controls="home" role="tab" data-toggle="tab">Contacts</a></li>
 
         <div id="chatTabTemplate" style="display: none;">
-          <li role="presentation" id="chatTab_[[index]]">
+          <li role="presentation" class="chatTab" id="chatTab_[[index]]">
             <a href="#chatTabPanel_[[index]]" aria-controls="chatTabPanel_[[index]]" role="tab" data-toggle="tab">
               [[name]]
             </a>
@@ -82,12 +82,22 @@
 
         <div id="chatTabPanelTemplate" style="display: none;">
           <div role="tabpanel" class="tab-pane" id="chatTabPanel_[[index]]">
+              <p class="chatTransactions" id="chatTransactions_[[index]]">
+
+              </p>
               <div class="input-group">
                 <input class="form-control" type="text" id="chatTextBox_[[index]]" placeholder="Enter message to send..." />
                 <span class="input-group-btn">
                   <button class="btn btn-default chatSendButton" id="chatSendButton_[[index]]">Send</button>
                 </span>
               </div>
+          </div>
+        </div>
+
+        <div id="chatTransactionTemplate" style="display: none;">
+          <div class="chatTransaction">
+            <span class="name">[[name]]:</span>
+            <span class="message">[[message]]</span>
           </div>
         </div>
 

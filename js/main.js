@@ -84,10 +84,81 @@ function sendMessage(dmAddress, message)
 
 }
 
+function processPersonalMessage(timestamp, dmAddress, subject, message)
+{
+  if (subject != 'DecentChat Private Message') {
+    return;
+  }
+
+  if (message.trim() === '') {
+    return;
+  }
+
+  var contacts = getContacts();
+  var index = null;
+  var contact = null;
+
+  for (var i = 0; i < contacts.length; i++) {
+    if (contacts[i].dmAddress == dmAddress) {
+      contact = contacts[i];
+      index = i;
+      break;
+    }
+  }
+
+  if (contact===null) {
+    return;
+  }
+
+  addChatTabForContact(index);
+  addChatTransaction(index, contact.name, message);
+
+}
+
+function deletePersonalMessage(id)
+{
+  var chunk = '';
+
+  var net = require('net');
+
+  var client = net.connect({ port: 8881 }, function() {
+    console.log('Connected (to get delete personal message)');
+  });
+  client.on('data', function(data) {
+
+    chunk += data.toString();
+    delimIndex = chunk.indexOf('\n');
+
+    while (delimIndex > -1) {
+      toProcess = chunk.substring(0, delimIndex);
+
+      if (toProcess.startsWith('*100')) {
+        client.write('delete\n');
+      } else if (toProcess.startsWith('*141')) {
+        client.write(id+'\n');
+      } else if (toProcess.startsWith('*340')) {
+        client.destroy();
+      }
+
+      chunk = chunk.substring(delimIndex + 1);
+      delimIndex = chunk.indexOf('\n');
+    }
+
+  });
+  client.on('close', function() {
+    console.log('Disconnected');
+  });
+}
+
 function getPersonalMessage(id)
 {
   var chunk = '';
   var messageStarted = false;
+  var messagePartCount = 0;
+  var timestamp = null;
+  var dmAddress = null;
+  var subject = null;
+  var message = '';
 
   var net = require('net');
 
@@ -103,12 +174,23 @@ function getPersonalMessage(id)
       toProcess = chunk.substring(0, delimIndex);
 
       if (toProcess.startsWith('*311')) {
+        processPersonalMessage(timestamp, dmAddress, subject, message);
+        deletePersonalMessage(id);
         client.destroy();
         return;
       }
 
       if (messageStarted === true && toProcess.length) {
-        console.log(toProcess);
+        if (messagePartCount === 0) {
+          timestamp = toProcess;
+        } else if (messagePartCount === 1) {
+          dmAddress = toProcess;
+        } else if (messagePartCount === 2) {
+          subject = toProcess;
+        } else if (messagePartCount >= 3) {
+          message += toProcess + '\n';
+        }
+        messagePartCount++;
       }
 
       if (toProcess.startsWith('*100')) {
@@ -172,6 +254,8 @@ function getPersonalMessageIDs()
   client.on('close', function() {
     console.log('Disconnected');
   });
+
+  setTimeout(function() { getPersonalMessageIDs(); }, 1000);
 }
 
 function getContacts()
@@ -265,13 +349,30 @@ $(document).on('click', '.contactChatButton', function() {
   var idParts = id.split('_');
   var index = idParts[1];
 
+  addChatTabForContact(index);
+
+  $('#chatTab_'+index+' a').tab('show');
+  $('#chatTextBox_'+index).focus();
+
+});
+
+$(document).on('click', '.chatTab', function() {
+  var id = $(this).attr('id');
+  var idParts = id.split('_');
+  var index = idParts[1];
+
+  $('#chatTextBox_'+index).focus();
+});
+
+function addChatTabForContact(index) {
+
+  var contacts = getContacts();
+  var contact = contacts[index];
+
   if ($('#chatTab_'+index+' a').length) {
     $('#chatTab_'+index+' a').tab('show');
     return;
   }
-
-  var contacts = getContacts();
-  var contact = contacts[index];
 
   var html = $('#chatTabTemplate').html();
 
@@ -287,9 +388,7 @@ $(document).on('click', '.contactChatButton', function() {
 
   $('#tabPanels').append(html);
 
-  $('#chatTab_'+index+' a').tab('show');
-
-});
+}
 
 $(document).on('click', '.chatSendButton', function() {
   var id = $(this).attr('id');
@@ -301,10 +400,28 @@ $(document).on('click', '.chatSendButton', function() {
 
   var message = $('#chatTextBox_'+index).val();
 
+  if (message.trim() === '') {
+    return;
+  }
+
   $('#chatTextBox_'+index).val('');
 
   sendMessage(contact.dmAddress, message);
+  addChatTransaction(index, "Me", message);
+
 });
+
+function addChatTransaction(index, name, message)
+{
+  var html = $('#chatTransactionTemplate').html();
+
+  html = html.replaceAll("[[name]]", name);
+  html = html.replaceAll("[[message]]", message);
+
+  $('#chatTransactions_'+index).append(html);
+
+  $('#chatTransactions_'+index).animate({ scrollTop: $('#chatTransactions_'+index)[0].scrollHeight}, 1000);
+}
 
 $(document).ready(function() {
     populateMyDmAddress();
