@@ -84,7 +84,7 @@ function sendMessage(dmAddress, message)
 
 }
 
-function processPersonalMessage(timestamp, dmAddress, subject, message)
+function processPersonalMessage(id, timestamp, dmAddress, subject, message)
 {
   if (subject != 'DecentChat Private Message') {
     return;
@@ -176,7 +176,7 @@ function getPersonalMessage(id)
       toProcess = chunk.substring(0, delimIndex);
 
       if (toProcess.startsWith('*311')) {
-        processPersonalMessage(timestamp, dmAddress, subject, message);
+        processPersonalMessage(id, timestamp, dmAddress, subject, message);
         client.destroy();
         return;
       }
