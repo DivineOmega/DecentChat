@@ -390,6 +390,16 @@ function addChatTabForContact(index) {
 
 }
 
+$(document).on('keypress', '.chatTextBox', function(e) {
+  if (e.keyCode == 13) {
+    var id = $(this).attr('id');
+    var idParts = id.split('_');
+    var index = idParts[1];
+
+     $('#chatSendButton_'+index).trigger('click');
+   }
+});
+
 $(document).on('click', '.chatSendButton', function() {
   var id = $(this).attr('id');
   var idParts = id.split('_');
