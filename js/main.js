@@ -1,12 +1,19 @@
 
+var localPort = 23500;
+var peerPort = 23501;
+
 function populateMyDmAddress()
 {
+  if ($('#dmAddress').val().length>0) {
+    return;
+  }
+
   var dmAddressStarted = false;
   var chunk = '';
 
   var net = require('net');
 
-  var client = net.connect({ port: 8881 }, function() {
+  var client = net.connect({ port: localPort }, function() {
     console.log('Connected (to get dm address)');
   });
   client.on('data', function(data) {
@@ -40,6 +47,75 @@ function populateMyDmAddress()
     console.log('Disconnected');
   });
 
+  setTimeout(function() { populateMyDmAddress(); }, 5000);
+}
+
+function addDmNode(hostname, port)
+{
+  var chunk = '';
+
+  var net = require('net');
+
+  var client = net.connect({ port: localPort }, function() {
+    console.log('Connected (to add bootstrap nodes)');
+  });
+  client.on('data', function(data) {
+
+    chunk += data.toString();
+    delimIndex = chunk.indexOf('\n');
+
+    while (delimIndex > -1) {
+      toProcess = chunk.substring(0, delimIndex);
+
+      console.log(toProcess);
+
+      if (toProcess.startsWith('*100')) {
+        client.write('node\n');
+      } else if (toProcess.startsWith('*151')) {
+        client.write(hostname+'\n');
+      } else if (toProcess.startsWith('*152')) {
+        client.write(port+'\n');
+      } else if (toProcess.startsWith('*350')) {
+        localStorage.bootstrapNodesAdded += hostname+':'+port+' ';
+        console.log('Added bootstrap node: '+hostname+':'+port);
+        client.destroy();
+      }
+
+      chunk = chunk.substring(delimIndex + 1);
+      delimIndex = chunk.indexOf('\n');
+    }
+
+  });
+  client.on('close', function() {
+    console.log('Disconnected');
+  });
+}
+
+function addBootstrapDmNodes()
+{
+  var bootstrapNodes = ['81.108.218.180:9991', '82.69.78.184:9991'];
+
+  for (var i = 0; i < bootstrapNodes.length; i++) {
+
+    var bootstrapNode = bootstrapNodes[i];
+
+    var bootstrapNodeParts = bootstrapNode.split(':');
+
+    var hostname = bootstrapNodeParts[0];
+    var port = bootstrapNodeParts[1];
+
+    if (typeof localStorage.bootstrapNodesAdded != 'undefined') {
+      if (localStorage.bootstrapNodesAdded.indexOf(hostname+':'+port) > -1) {
+        continue;
+      }
+    } else {
+      localStorage.bootstrapNodesAdded = '';
+    }
+
+    addDmNode(hostname, port);
+
+  }
+
 }
 
 function sendMessage(dmAddress, message)
@@ -48,7 +124,7 @@ function sendMessage(dmAddress, message)
 
   var net = require('net');
 
-  var client = net.connect({ port: 8881 }, function() {
+  var client = net.connect({ port: localPort }, function() {
     console.log('Connected (to send message)');
   });
   client.on('data', function(data) {
@@ -123,7 +199,7 @@ function deletePersonalMessage(id)
 
   var net = require('net');
 
-  var client = net.connect({ port: 8881 }, function() {
+  var client = net.connect({ port: localPort }, function() {
     console.log('Connected (to get delete personal message)');
   });
   client.on('data', function(data) {
@@ -164,7 +240,7 @@ function getPersonalMessage(id)
 
   var net = require('net');
 
-  var client = net.connect({ port: 8881 }, function() {
+  var client = net.connect({ port: localPort }, function() {
     console.log('Connected (to get personal message by ID)');
   });
   client.on('data', function(data) {
@@ -219,7 +295,7 @@ function getPersonalMessageIDs()
 
   var net = require('net');
 
-  var client = net.connect({ port: 8881 }, function() {
+  var client = net.connect({ port: localPort }, function() {
     console.log('Connected (to get personal message IDs)');
   });
   client.on('data', function(data) {
@@ -448,7 +524,13 @@ function addChatTransaction(index, timestamp, name, message)
 }
 
 $(document).ready(function() {
+
+    var exec = require('child_process').exec;
+
+    exec('java -jar ./dist/DecentMessaging.jar --local-server-port '+localPort+' --peer-server-port '+peerPort+' --portable --hidden');
+
     populateMyDmAddress();
+    addBootstrapDmNodes();
     updateContactsUI();
     getPersonalMessageIDs();
 });

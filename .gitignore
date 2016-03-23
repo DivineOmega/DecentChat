@@ -1,3 +1,5 @@
 bower_components
 builds/DecentChat-*/
 builds/electron-*.zip
+dist/*
+.decentmessaging
