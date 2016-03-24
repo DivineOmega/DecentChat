@@ -67,8 +67,6 @@ function addDmNode(hostname, port)
     while (delimIndex > -1) {
       toProcess = chunk.substring(0, delimIndex);
 
-      console.log(toProcess);
-
       if (toProcess.startsWith('*100')) {
         client.write('node\n');
       } else if (toProcess.startsWith('*151')) {
@@ -97,46 +95,6 @@ function addBootstrapDmNodes()
                         '82.69.78.184:9991',
                         '81.108.218.180:23501',
                         '82.69.78.184:23501'];
-
-  /*
-  var os = require('os');
-
-  var netInterfaces = os.networkInterfaces();
-
-  for (var key in netInterfaces) {
-
-    if (!netInterfaces.hasOwnProperty(key)) {
-      continue;
-    }
-
-    var netInterface = netInterfaces[key];
-
-    for (var k = 0; k < netInterface.length;k++) {
-
-      var netInterfaceFamily = netInterface[k];
-
-      if (!netInterfaceFamily.internal && netInterfaceFamily.family == 'IPv4'){
-
-        var addressParts = netInterfaceFamily.address.split('.');
-
-        if (addressParts.length == 4) {
-
-          for (var l = 0; l <= 254; l++) {
-
-            bootstrapNodes.push(addressParts[0] + '.' + addressParts[1] + '.' +
-                                addressParts[2] + '.' + l + ':'+peerPort);
-
-            bootstrapNodes.push(addressParts[0] + '.' + addressParts[1] + '.' +
-                                addressParts[2] + '.' + l + ':9991');
-
-          }
-
-        }
-
-      }
-
-    }
-  */
 
   for (var i = 0; i < bootstrapNodes.length; i++) {
 
