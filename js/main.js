@@ -98,6 +98,46 @@ function addBootstrapDmNodes()
                         '81.108.218.180:23501',
                         '82.69.78.184:23501'];
 
+  /*
+  var os = require('os');
+
+  var netInterfaces = os.networkInterfaces();
+
+  for (var key in netInterfaces) {
+
+    if (!netInterfaces.hasOwnProperty(key)) {
+      continue;
+    }
+
+    var netInterface = netInterfaces[key];
+
+    for (var k = 0; k < netInterface.length;k++) {
+
+      var netInterfaceFamily = netInterface[k];
+
+      if (!netInterfaceFamily.internal && netInterfaceFamily.family == 'IPv4'){
+
+        var addressParts = netInterfaceFamily.address.split('.');
+
+        if (addressParts.length == 4) {
+
+          for (var l = 0; l <= 254; l++) {
+
+            bootstrapNodes.push(addressParts[0] + '.' + addressParts[1] + '.' +
+                                addressParts[2] + '.' + l + ':'+peerPort);
+
+            bootstrapNodes.push(addressParts[0] + '.' + addressParts[1] + '.' +
+                                addressParts[2] + '.' + l + ':9991');
+
+          }
+
+        }
+
+      }
+
+    }
+  */
+
   for (var i = 0; i < bootstrapNodes.length; i++) {
 
     var bootstrapNode = bootstrapNodes[i];
@@ -118,6 +158,8 @@ function addBootstrapDmNodes()
     addDmNode(hostname, port);
 
   }
+
+  setTimeout(function() { addBootstrapDmNodes(); }, 15000);
 
 }
 
