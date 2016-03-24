@@ -93,7 +93,10 @@ function addDmNode(hostname, port)
 
 function addBootstrapDmNodes()
 {
-  var bootstrapNodes = ['81.108.218.180:9991', '82.69.78.184:9991'];
+  var bootstrapNodes = ['81.108.218.180:9991',
+                        '82.69.78.184:9991',
+                        '81.108.218.180:23501',
+                        '82.69.78.184:23501'];
 
   for (var i = 0; i < bootstrapNodes.length; i++) {
 
