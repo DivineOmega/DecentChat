@@ -531,6 +531,7 @@ $(document).ready(function() {
     var exec = require('child_process').exec;
 
     exec('java -jar ./dist/DecentMessaging.jar --local-server-port '+localPort+' --peer-server-port '+peerPort+' --portable --hidden');
+    exec('java -jar ./resources/app/DecentMessaging.jar --local-server-port '+localPort+' --peer-server-port '+peerPort+' --portable --hidden');
 
     populateMyDmAddress();
     addBootstrapDmNodes();
