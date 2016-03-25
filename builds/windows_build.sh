@@ -13,10 +13,14 @@ mv DecentChat-windows-x64/electron.exe DecentChat-windows-x64/DecentChat.exe
 # Make app directory
 mkdir DecentChat-windows-x64/resources/app
 
-# Sync *.html and *.js
+# Sync app content
 rsync ../* DecentChat-windows-x64/resources/app/ -r --exclude builds
 
 # Install dependencies
 cd DecentChat-windows-x64/resources/app/
 bower install bootstrap
-cd ../../../
+mkdir dist
+cd dist
+wget -nc https://github.com/DivineOmega/DecentMessaging/releases/download/0.1/DecentMessaging.jar
+chmod +x DecentMessaging.jar
+cd ../../../../
