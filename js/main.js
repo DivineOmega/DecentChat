@@ -468,6 +468,8 @@ function addChatTabForContact(index) {
 
   $('#tabPanels').append(html);
 
+  $(window).trigger('resize');
+
 }
 
 $(document).on('keypress', '.chatTextBox', function(e) {
@@ -531,12 +533,22 @@ $(document).ready(function() {
     var exec = require('child_process').exec;
 
     exec('java -jar ./dist/DecentMessaging.jar --local-server-port '+localPort+' --peer-server-port '+peerPort+' --portable --hidden');
-    exec('java -jar ./resources/app/DecentMessaging.jar --local-server-port '+localPort+' --peer-server-port '+peerPort+' --portable --hidden');
+    exec('java -jar ./resources/app/dist/DecentMessaging.jar --local-server-port '+localPort+' --peer-server-port '+peerPort+' --portable --hidden');
 
     populateMyDmAddress();
     addBootstrapDmNodes();
     updateContactsUI();
     getPersonalMessageIDs();
+
+    setInterval( function() { $(window).trigger('resize'); }, 1000 );
+});
+
+$(window).resize(function() {
+
+  var height = $(document).height() - $('.chatTextBox').height() - $('.tabs').height() - 120;
+
+  $('.chatTransactions').height(height);
+
 });
 
 String.prototype.replaceAll = function(search, replacement) {
