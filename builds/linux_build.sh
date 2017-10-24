@@ -21,6 +21,6 @@ cd DecentChat-linux-x64/resources/app/
 bower install bootstrap
 mkdir dist
 cd dist
-wget -nc https://github.com/DivineOmega/DecentMessaging/releases/download/0.1.1/DecentMessaging.jar
+wget -nc https://github.com/DivineOmega/DecentMessaging/releases/download/v0.3.0/DecentMessaging.jar
 chmod +x DecentMessaging.jar
 cd ../../../../
