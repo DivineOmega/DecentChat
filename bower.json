@@ -1,0 +1,21 @@
+{
+  "name": "DecentChat",
+  "description": "",
+  "main": "start.js",
+  "authors": [
+    "Jordan Hall <jordan@hall05.co.uk>"
+  ],
+  "license": "-",
+  "homepage": "https://github.com/DivineOmega/DecentChat",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

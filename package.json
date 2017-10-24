@@ -1,4 +1,6 @@
 {
   "name": "DecentChat",
-  "main": "start.js"
+  "main": "start.js",
+  "dependencies": {
+  }
 }
