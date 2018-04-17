@@ -18,9 +18,9 @@ rsync ../* DecentChat-windows-x64/resources/app/ -r --exclude builds
 
 # Install dependencies
 cd DecentChat-windows-x64/resources/app/
-bower install bootstrap
+bower update
 mkdir dist
 cd dist
-wget -nc https://github.com/DivineOmega/DecentMessaging/releases/download/v0.3.0/DecentMessaging.jar
+wget -nc https://github.com/DivineOmega/DecentMessaging/releases/download/v0.4.0/DecentMessaging.jar
 chmod +x DecentMessaging.jar
 cd ../../../../
