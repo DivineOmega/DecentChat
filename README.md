@@ -15,7 +15,7 @@ cd builds
 ./linux_build.sh
 ```
 
-### Linux
+### Windows
 
 ```
 cd builds
